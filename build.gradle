@@ -51,10 +51,10 @@ tasks.named('bootBuildImage') {
 
 graalvmNative {
 	binaries {
-		named("test") {
-			// Allocates 8GB to the native-image build JVM to prevent
-			// a SIGSEGV crash in Parallel GC during nativeTest compilation.
-			buildArgs.add('-J-Xmx8g')
+		named("main") {
+			buildArgs.add("-H:+ReportExceptionStackTraces")
+			buildArgs.add("-H:CPUFeatures=generic")
+			buildArgs.add("-J-Xmx8g")
 		}
 	}
 }
