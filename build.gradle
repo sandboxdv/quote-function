@@ -37,7 +37,10 @@ dependencyManagement {
 
 tasks.named('bootBuildImage') {
 	builder = 'paketobuildpacks/builder-jammy-tiny'
-	environment = ['BP_NATIVE_IMAGE': 'true']
+	environment = [
+			'BP_NATIVE_IMAGE': 'true',
+			'BP_NATIVE_IMAGE_BUILD_ARGUMENTS': '-march=compatibility'
+	]
 	imageName = "${project.name}"
 
 	docker {
@@ -51,10 +54,10 @@ tasks.named('bootBuildImage') {
 
 graalvmNative {
 	binaries {
-		named("main") {
-			buildArgs.add("-H:+ReportExceptionStackTraces")
-			buildArgs.add("-H:CPUFeatures=generic")
-			buildArgs.add("-J-Xmx8g")
+		named("test") {
+			// Allocates 8GB to the native-image build JVM to prevent
+			// a SIGSEGV crash in Parallel GC during nativeTest compilation.
+			buildArgs.add('-J-Xmx8g')
 		}
 	}
 }
